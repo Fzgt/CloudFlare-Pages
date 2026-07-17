@@ -145,26 +145,3 @@ npm run build
 
 Remember to update the API URL in `my-worker-app/src/App.tsx:19` to your deployed Worker URL.
 
----
-
-## What I Learned Building This
-
-- **Workbox strategy selection is a UX decision, not a technical one.** NetworkFirst hurts perceived performance if you use it for everything; CacheFirst breaks freshness if you use it for API responses. Matching the strategy to the resource semantics is the whole game.
-- **Service Worker updates are subtle.** Without `skipWaiting` + `clientsClaim`, an updated SW sits in "waiting" state until every tab of the site closes. Users see stale behavior for hours.
-- **Cloudflare Workers ≠ AWS Lambda.** No filesystem, no long-running processes, 10ms CPU budget on the free tier, but ~zero cold-start latency. It's a fundamentally different model — great for API glue + edge logic, wrong tool for anything stateful or CPU-heavy.
-- **`Cache-Control` headers are load-bearing.** Setting the right headers on Worker responses lets Cloudflare's edge cache carry most of the traffic — the Worker only runs on cache misses.
-
----
-
-## Possible Next Steps
-
-- Add a Cloudflare KV or D1 binding so the API returns actual persisted data
-- Add a background sync queue for offline writes (Workbox `BackgroundSyncPlugin`)
-- Wire up `web-vitals` reporting to a Worker analytics endpoint
-- Migrate the frontend off CRA to Vite (CRA is deprecated as of 2023)
-
----
-
-## License
-
-MIT
